@@ -2,50 +2,61 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Azar Clone</title>
+<title>Azar Clone - Rizvi</title>
 <style>
-body,html{margin:0;padding:0;background:#000;width:100%;height:100%}
-#root{width:100vw;height:100vh}
-#btns{position:fixed;bottom:15px;left:0;right:0;display:flex;justify-content:center;gap:12px;z-index:9999}
-#btns button{padding:12px 20px;border:0;border-radius:25px;font-size:16px;font-weight:bold;color:#fff}
-#nextBtn{background:#ff3b30}
-#chatBtn{background:#007aff}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial}
+body,html{width:100%;height:100%;background:#0f0f1a;overflow:hidden}
+#root{width:100vw;height:100vh;position:fixed;top:0;left:0}
+#topBar{position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#ff0080,#7928ff,#00c6ff);padding:10px 12px 12px;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 20px 20px;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+#logo{color:#fff;font-weight:900;font-size:22px}
+#logo span{font-size:12px;background:#fff;color:#ff0080;padding:2px 7px;border-radius:10px;margin-left:4px}
+#coinBox{background:#fff;padding:7px 13px;border-radius:20px;font-weight:900;font-size:15px;color:#000}
+#freeBtn{background:#FFD700;border:2px solid #fff;color:#000;font-weight:900;padding:6px 10px;border-radius:20px;font-size:13px}
+#myInfo{position:fixed;left:12px;bottom:110px;z-index:9999;background:rgba(0,0,0,0.55);padding:10px 14px;border-radius:15px;color:#fff;border:1px solid rgba(255,255,255,0.3)}
+#myInfo b{font-size:17px}
+#myInfo p{font-size:13px;opacity:0.9;margin-top:2px}
+#btns{position:fixed;bottom:18px;left:0;right:0;z-index:9999;display:flex;justify-content:center;align-items:center;gap:14px}
+.circleBtn{width:58px;height:58px;border-radius:50%;border:3px solid #fff;font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.5);color:#fff}
+#micBtn{background:#333}
+#camBtn{background:#333}
+#nextBtn{width:75px;height:75px;font-size:15px;font-weight:900;background:linear-gradient(135deg,#ff0080,#ff4d00);flex-direction:column;line-height:1.1}
+#chatBtn{background:linear-gradient(135deg,#007aff,#00c6ff)}
+#giftBtn{background:linear-gradient(135deg,#ffcc00,#ff9500);color:#000}
 </style>
 </head>
 <body>
 <div id="root"></div>
-<div id="btns">
-<button id="nextBtn">Next ⏭️</button>
-<button id="chatBtn">Chat 💬</button>
+<div id="topBar">
+<div id="logo">AZAR💜<span>LIVE</span></div>
+<div style="display:flex;gap:8px;align-items:center">
+<div id="coinBox">🪙 <span id="coinCount">100</span></div>
+<button id="freeBtn" onclick="addCoins()">+ FREE</button>
 </div>
-
+</div>
+<div id="myInfo"><b>❤️ Rizvi, 21</b><p>● India 🇮🇳 • Hindi • Online</p></div>
+<div id="btns">
+<button class="circleBtn" id="micBtn">🎤</button>
+<button class="circleBtn" id="camBtn">📷</button>
+<button class="circleBtn" id="nextBtn">NEXT<br>⏭️</button>
+<button class="circleBtn" id="chatBtn">💬</button>
+<button class="circleBtn" id="giftBtn">🎁</button>
+</div>
 <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
 <script>
 const appID = 1089853157;
-
-// 👇👇👇 BAS YAHAN PASTE KARNA HAI - AUR KAHIN NAHI 👇👇👇
 const serverSecret = "a393a5dfade550a6a647ad24118c4055";
-// 👆👆👆 UPAR WALI LINE ME - YAHAN_PASTE_KARO ko delete karke apna secret daal de 👆👆👆
-
 const roomID = "azar-room-1";
 const userID = "user_" + Math.floor(Math.random()*100000);
-const userName = "User_" + Math.floor(Math.random()*100000);
+const userName = "Rizvi_" + Math.floor(Math.random()*1000);
 const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
-
 const zp = ZegoUIKitPrebuilt.create(kitToken);
-zp.joinRoom({
-  container: document.querySelector("#root"),
-  scenario: { mode: ZegoUIKitPrebuilt.OneONoneCall },
-  showPreJoinView: false,
-  showScreenSharingButton: false,
-});
-
-document.getElementById("nextBtn").onclick = function(){
-  location.reload();
-};
-document.getElementById("chatBtn").onclick = function(){
-  alert("Chat jaldi aa raha hai bhai!");
-};
+zp.joinRoom({container: document.querySelector("#root"),scenario: { mode: ZegoUIKitPrebuilt.OneONoneCall },showPreJoinView: false,showScreenSharingButton: false,showTextChat: true});
+let coins = localStorage.getItem("myCoins");
+if(!coins){ coins = 100; localStorage.setItem("myCoins", coins); }
+coins = parseInt(coins);
+document.getElementById("coinCount").innerText = coins;
+function addCoins(){ coins += 50; localStorage.setItem("myCoins", coins); document.getElementById("coinCount").innerText = coins; alert("50 Coin mil gaya bhai! Total: " + coins); }
+document.getElementById("nextBtn").onclick = function(){ if(coins < 10){ alert("Coin khatam bhai! +FREE dabao"); return; } coins -= 10; localStorage.setItem("myCoins", coins); document.getElementById("coinCount").innerText = coins; location.reload(); };
 </script>
 </body>
 </html>
